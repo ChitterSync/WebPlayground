@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gia Music Player</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .music-player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      max-width: 420px;
+      margin: 5vh auto 0 auto;
+      background: #181818;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #000a;
+      padding: 2em 2em 1.5em 2em;
+      z-index: 1;
+    }
+    .album-art {
+      width: 180px;
+      height: 180px;
+      background: #222;
+      border-radius: 12px;
+      margin-bottom: 1.2em;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 2px 16px #0008;
+    }
+    .song-info {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    .song-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 0.2em;
+    }
+    .song-artist {
+      font-size: 1em;
+      color: #ccc;
+    }
+    .music-controls {
+      display: flex;
+      align-items: center;
+      gap: 2em;
+      margin-bottom: 0.7em;
+    }
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      width: 100%;
+      margin-bottom: 0.7em;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background: #00f2ea;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .volume-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    .music-playlist {
+      max-width: 420px;
+      margin: 2em auto 0 auto;
+      background: #181818;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #0003;
+      padding: 1.2em 1.5em;
+      overflow-y: auto;
+    }
+    .playlist-item {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+      padding: 0.5em 0.7em;
+    }
+    .playlist-item.active, .playlist-item:hover {
+      background: #222b;
+    }
+    .playlist-thumb {
+      width: 54px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px #0006;
+    }
+    .playlist-info {
+      flex: 1;
+    }
+    .playlist-title {
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    .playlist-artist {
+      color: #ccc;
+      font-size: 0.98em;
+      margin-top: 0.2em;
+    }
+    @media (max-width: 600px) {
+      .music-player-container, .music-playlist { max-width: 98vw; padding: 1em 0.5em; }
+      .album-art { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="music-player-container">
+    <div class="album-art" id="albumArt"></div>
+    <div class="song-info">
+      <div class="song-title" id="songTitle">Song Title</div>
+      <div class="song-artist" id="songArtist">Artist</div>
+    </div>
+    <audio id="audio" preload="metadata"></audio>
+    <div class="music-controls">
+      <button class="icon-btn" id="prevBtn" title="Previous"><i class="fas fa-backward"></i></button>
+      <button class="play-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
+      <button class="icon-btn" id="nextBtn" title="Next"><i class="fas fa-forward"></i></button>
+    </div>
+    <div class="progress-row">
+      <span class="time" id="currentTime">0:00</span>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <span class="time" id="duration">0:00</span>
+    </div>
+    <div class="volume-row">
+      <i class="fas fa-volume-up"></i>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" style="width:100px;">
+    </div>
+  </div>
+  <div class="music-playlist" id="playlist">
+    <!-- Playlist items injected here -->
+  </div>
+  <script>
+    // Music playlist demo data
+    const musicPlaylist = [
+      {
+        title: 'Dreams',
+        artist: 'Joakim Karud',
+        src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        cover: 'https://i1.sndcdn.com/artworks-000208876838-7y8q1d-t500x500.jpg'
+      },
+      {
+        title: 'Sunny',
+        artist: 'KODOMOi',
+        src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+        cover: 'https://i1.sndcdn.com/artworks-000208876838-7y8q1d-t500x500.jpg'
+      },
+      {
+        title: 'Jazz In Paris',
+        artist: 'Media Right Productions',
+        src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+        cover: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Jazz_in_Paris.jpg'
+      },
+      {
+        title: 'Scott Joplin - Maple Leaf Rag',
+        artist: 'Scott Joplin',
+        src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', // replaced with mp3 for compatibility
+        cover: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Scott_Joplin_19072.jpg'
+      },
+      {
+        title: 'Kevin MacLeod - Carefree',
+        artist: 'Kevin MacLeod',
+        src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/kevin_macleod/royalty-free-music/kevin_macLeod_-_Carefree.mp3',
+        cover: 'https://freemusicarchive.org/image?file=images%2Falbums%2Fkevin_macleod_-_royalty-free-music_-_20190719135032497.jpg&width=290&height=290&type=album'
+      },
+      {
+        title: 'Chris Zabriskie - Prelude No. 23',
+        artist: 'Chris Zabriskie',
+        src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Chris_Zabriskie/Preludes/Chris_Zabriskie_-_Prelude_No_23.mp3',
+        cover: 'https://freemusicarchive.org/image?file=images%2Falbums%2FChris_Zabriskie_-_Preludes_-_20190719135032497.jpg&width=290&height=290&type=album'
+      },
+      {
+        title: 'Kai Engel - Moonlight Reprise',
+        artist: 'Kai Engel',
+        src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kai_Engel/Idea/Kai_Engel_-_Moonlight_Reprise.mp3',
+        cover: 'https://freemusicarchive.org/image?file=images%2Falbums%2FKai_Engel_-_Idea_-_20190719135032497.jpg&width=290&height=290&type=album'
+      },
+      {
+        title: 'Komiku - Battle of Pogs',
+        artist: 'Komiku',
+        src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Best_Off/Komiku_-_Battle_of_Pogs.mp3',
+        cover: 'https://freemusicarchive.org/image?file=images%2Falbums%2FKomiku_-_Best_Off_-_20190719135032497.jpg&width=290&height=290&type=album'
+      }
+    ];
+    let currentTrack = 0;
+    const audio = document.getElementById('audio');
+    const albumArt = document.getElementById('albumArt');
+    const songTitle = document.getElementById('songTitle');
+    const songArtist = document.getElementById('songArtist');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    const currentTime = document.getElementById('currentTime');
+    const duration = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volumeSlider');
+    function loadTrack(idx) {
+      const track = musicPlaylist[idx];
+      audio.src = track.src;
+      albumArt.style.backgroundImage = `url('${track.cover}')`;
+      songTitle.textContent = track.title;
+      songArtist.textContent = track.artist;
+      document.querySelectorAll('.playlist-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+    }
+    function playTrack(idx) {
+      loadTrack(idx);
+      audio.play();
+    }
+    playPauseBtn.onclick = () => {
+      if (audio.paused) audio.play();
+      else audio.pause();
+    };
+    prevBtn.onclick = () => {
+      currentTrack = (currentTrack - 1 + musicPlaylist.length) % musicPlaylist.length;
+      playTrack(currentTrack);
+    };
+    nextBtn.onclick = () => {
+      currentTrack = (currentTrack + 1) % musicPlaylist.length;
+      playTrack(currentTrack);
+    };
+    audio.onplay = () => {
+      playPauseBtn.querySelector('i').className = 'fas fa-pause';
+    };
+    audio.onpause = () => {
+      playPauseBtn.querySelector('i').className = 'fas fa-play';
+    };
+    audio.ontimeupdate = () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = percent + '%';
+      currentTime.textContent = formatTime(audio.currentTime);
+    };
+    audio.onloadedmetadata = () => {
+      duration.textContent = formatTime(audio.duration);
+      currentTime.textContent = formatTime(audio.currentTime);
+    };
+    progressBar.onclick = (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percent = x / rect.width;
+      audio.currentTime = percent * audio.duration;
+    };
+    volumeSlider.oninput = () => {
+      audio.volume = volumeSlider.value;
+    };
+    audio.onended = () => {
+      nextBtn.click();
+    };
+    function formatTime(sec) {
+      sec = Math.floor(sec);
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    // Album art fallback if image fails to load
+    albumArt.onerror = function() {
+      albumArt.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg')";
+    };
+    // Render playlist
+    function renderPlaylist() {
+      const pl = document.getElementById('playlist');
+      pl.innerHTML = '<div class="playlist-title">Playlist</div>' + musicPlaylist.map((item, i) => `
+        <div class="playlist-item${i === currentTrack ? ' active' : ''}" data-idx="${i}">
+          <img src="${item.cover}" alt="${item.title}" class="playlist-thumb">
+          <div class="playlist-info">
+            <div class="playlist-title">${item.title}</div>
+            <div class="playlist-artist">${item.artist}</div>
+          </div>
+        </div>
+      `).join('');
+      document.querySelectorAll('.playlist-item').forEach(item => {
+        item.onclick = function() {
+          const idx = +item.getAttribute('data-idx');
+          currentTrack = idx;
+          playTrack(idx);
+        };
+      });
+    }
+    renderPlaylist();
+    loadTrack(currentTrack);
+  </script>
+</body>
+</html>
