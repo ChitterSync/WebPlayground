@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.music-player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 420px;
+  margin: 5vh auto 0 auto;
+  background: #181818;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #000a;
+  padding: 2em 2em 1.5em 2em;
+  z-index: 1;
+}
+.album-art {
+  width: 180px;
+  height: 180px;
+  background: #222;
+  border-radius: 12px;
+  margin-bottom: 1.2em;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 2px 16px #0008;
+}
+.song-info {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.song-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 0.2em;
+}
+.song-artist {
+  font-size: 1em;
+  color: #ccc;
+}
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  margin-bottom: 0.7em;
+}
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  width: 100%;
+  margin-bottom: 0.7em;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.progress {
+  height: 100%;
+  background: #00f2ea;
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.1s;
+}
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+.music-playlist {
+  max-width: 420px;
+  margin: 2em auto 0 auto;
+  background: #181818;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0003;
+  padding: 1.2em 1.5em;
+  overflow-y: auto;
+}
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+  padding: 0.5em 0.7em;
+}
+.playlist-item.active, .playlist-item:hover {
+  background: #222b;
+}
+.playlist-thumb {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px #0006;
+}
+.playlist-info {
+  flex: 1;
+}
+.playlist-title {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.playlist-artist {
+  color: #ccc;
+  font-size: 0.98em;
+  margin-top: 0.2em;
+}
+@media (max-width: 600px) {
+  .music-player-container, .music-playlist { max-width: 98vw; padding: 1em 0.5em; }
+  .album-art { width: 120px; height: 120px; }
+}

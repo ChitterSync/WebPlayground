@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Playground Search Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #252525; }
+    .search-box { margin-bottom: 1rem; }
+    input[type="text"] { padding: 0.5rem; width: 300px; font-size: 1rem; }
+    select { padding: 0.5rem; font-size: 1rem; margin-left: 0.5rem; }
+    ul { list-style: none; padding: 0; }
+    li { background: #1d1d1d; margin-bottom: 0.5rem; padding: 0.75rem; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); color: azure;}
+    .row { display: flex; gap: 1rem; }
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: #222; color: #fff; padding: 2rem; border-radius: 8px; min-width: 300px;
+      box-shadow: 0 2px 10px #000a;
+      position: relative;
+    }
+    .close {
+      position: absolute; top: 10px; right: 20px; font-size: 2rem; cursor: pointer;
+    }
+    .star {
+      color: gold; cursor: pointer; margin-left: 0.5rem;
+    }
+    .star.inactive {
+      color: #888;
+    }
+    .star.pop {
+      animation: star-pop 0.3s cubic-bezier(0.4,1.4,0.6,1) 1;
+    }
+    .star i.star-animate {
+      animation: star-flash-pop 0.4s cubic-bezier(0.4,1.4,0.6,1);
+    }
+    .star i.star-animate.inactive {
+      animation: star-fade-red 0.4s cubic-bezier(0.4,1.4,0.6,1);
+    }
+    @keyframes star-pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5) rotate(-10deg); }
+      70% { transform: scale(1.2) rotate(8deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes star-flash-pop {
+      0% { color: #fff700; filter: drop-shadow(0 0 0px #fff700); transform: scale(1); }
+      30% { color: #fff700; filter: drop-shadow(0 0 8px #fff700); transform: scale(1.7) rotate(-10deg); }
+      60% { color: gold; filter: drop-shadow(0 0 2px gold); transform: scale(1.2) rotate(8deg); }
+      100% { color: gold; filter: none; transform: scale(1) rotate(0deg); }
+    }
+    @keyframes star-fade-red {
+      0% { color: #888; filter: none; transform: scale(1); }
+      30% { color: #ff4444; filter: drop-shadow(0 0 8px #ff4444); transform: scale(1.7) rotate(-10deg); }
+      60% { color: #ff8888; filter: drop-shadow(0 0 2px #ff8888); transform: scale(1.2) rotate(8deg); }
+      100% { color: #888; filter: none; transform: scale(1) rotate(0deg); }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Search Playground</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Type to search...">
+    <button id="filterBtn" title="Filter"><i class="fas fa-filter"></i></button>
+    <button id="sortBtn" title="Sort"><i class="fas fa-sort"></i></button>
+    <select id="sortOrder">
+      <option value="unsorted">Default</option>
+      <option value="az">A-Z</option>
+      <option value="za">Z-A</option>
+      <option value="popularity">Popularity</option>
+      <option value="shortest">Shortest Name</option>
+      <option value="longest">Longest Name</option>
+      <option value="reversepop">Least Popular</option>
+      <option value="random">Random</option>
+    </select>
+  </div>
+  <ul id="itemList">
+    
+  </ul>
+  <div id="modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2 id="modalName"></h2>
+      <p id="modalPopularity"></p>
+      <p id="modalAbout"></p>
+    </div>
+  </div>
+  <script>
+    // 1. Load companies from JSON and store about/icon
+    let companies = [];
+    let companyMap = {};
+    fetch('companies.json')
+      .then(res => res.json())
+      .then(data => {
+        companies = data;
+        // Add a default icon for each company (customize as needed)
+        companies.forEach(c => {
+          // Assign custom icons for user-owned companies
+          if (c.name === 'Reach Studios') c.icon = 'fas fa-mountain-sun';
+          else if (c.name === 'ChitterSync') c.icon = 'fas fa-comments';
+          else if (c.name === 'Gia') c.icon = 'fas fa-leaf';
+          else if (c.name === 'ChitterHaven') c.icon = 'fas fa-house-chimney';
+          else if (c.name === 'JadeConnect') c.icon = 'fas fa-gem';
+          else if (c.name === 'NovanceModding') c.icon = 'fas fa-code';
+          // Existing well-known company icons
+          else if (c.name === 'Google') c.icon = 'fab fa-google';
+          else if (c.name === 'Microsoft') c.icon = 'fab fa-microsoft';
+          else if (c.name === 'Apple') c.icon = 'fab fa-apple';
+          else if (c.name === 'Amazon') c.icon = 'fab fa-amazon';
+          else if (c.name === 'Meta') c.icon = 'fab fa-facebook';
+          else if (c.name === 'Twitter') c.icon = 'fab fa-twitter';
+          else if (c.name === 'LinkedIn') c.icon = 'fab fa-linkedin';
+          else if (c.name === 'Reddit') c.icon = 'fab fa-reddit';
+          else if (c.name === 'GitHub') c.icon = 'fab fa-github';
+          else if (c.name === 'Discord') c.icon = 'fab fa-discord';
+          else if (c.name === 'Spotify') c.icon = 'fab fa-spotify';
+          else if (c.name === 'Twitch') c.icon = 'fab fa-twitch';
+          else if (c.name === 'YouTube') c.icon = 'fab fa-youtube';
+          else if (c.name === 'Dropbox') c.icon = 'fab fa-dropbox';
+          else if (c.name === 'Slack') c.icon = 'fab fa-slack';
+          else if (c.name === 'Shopify') c.icon = 'fab fa-shopify';
+          else if (c.name === 'Uber') c.icon = 'fab fa-uber';
+          else if (c.name === 'Airbnb') c.icon = 'fab fa-airbnb';
+          else if (c.name === 'Instagram') c.icon = 'fab fa-instagram';
+          else if (c.name === 'WhatsApp') c.icon = 'fab fa-whatsapp';
+          else if (c.name === 'Telegram') c.icon = 'fab fa-telegram';
+          else if (c.name === 'Snapchat') c.icon = 'fab fa-snapchat';
+          else if (c.name === 'TikTok') c.icon = 'fab fa-tiktok';
+          else c.icon = 'fas fa-globe';
+          companyMap[c.name] = c;
+        });
+        renderList(companies.map(c => c.name));
+      });
+
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+
+    const itemList = document.getElementById('itemList');
+    const searchInput = document.getElementById('searchInput');
+
+    function renderList(filteredItems) {
+      itemList.innerHTML = '';
+      if (filteredItems.length === 0) {
+        itemList.innerHTML = '<li>No results found.</li>';
+        return;
+      }
+      for (let i = 0; i < filteredItems.length; i += 3) {
+        const row = document.createElement('div');
+        row.className = 'row';
+        for (let j = i; j < i + 3 && j < filteredItems.length; j++) {
+          const name = filteredItems[j];
+          const company = companyMap[name];
+          const li = document.createElement('li');
+          // Add icon
+          const icon = document.createElement('i');
+          icon.className = company && company.icon ? company.icon : 'fas fa-globe';
+          icon.style.marginRight = '0.5rem';
+          li.appendChild(icon);
+          li.appendChild(document.createTextNode(name));
+          li.style.flex = '1';
+          // Add star for favorites
+          const star = document.createElement('span');
+          const starIcon = document.createElement('i');
+          starIcon.className = 'fas fa-star' + (favorites[name] ? '' : ' inactive');
+          star.appendChild(starIcon);
+          star.className = 'star' + (favorites[name] ? '' : ' inactive');
+          star.onclick = (e) => {
+            e.stopPropagation();
+            favorites[name] = !favorites[name];
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            // Toggle inactive class for visual update
+            if (favorites[name]) {
+              star.classList.remove('inactive');
+              starIcon.classList.remove('inactive');
+              // Animate gold pop
+              starIcon.classList.remove('star-animate', 'inactive');
+              void starIcon.offsetWidth;
+              starIcon.classList.add('star-animate');
+            } else {
+              star.classList.add('inactive');
+              starIcon.classList.add('inactive');
+              // Animate red fade
+              starIcon.classList.remove('star-animate', 'inactive');
+              void starIcon.offsetWidth;
+              starIcon.classList.add('star-animate', 'inactive');
+            }
+          };
+          li.appendChild(star);
+          // Show modal on click
+          li.onclick = () => showModal(name);
+          row.appendChild(li);
+        }
+        itemList.appendChild(row);
+      }
+    }
+
+    // 3. Update showModal to show about text
+    function showModal(name) {
+      const company = companyMap[name];
+      document.getElementById('modalName').textContent = name;
+      document.getElementById('modalPopularity').textContent = 'Popularity: ' + (company && company.popularity ? company.popularity : 'N/A');
+      // Add about text
+      let aboutElem = document.getElementById('modalAbout');
+      if (!aboutElem) {
+        aboutElem = document.createElement('p');
+        aboutElem.id = 'modalAbout';
+        document.querySelector('.modal-content').appendChild(aboutElem);
+      }
+      aboutElem.textContent = company && company.about ? company.about : '';
+      document.getElementById('modal').style.display = 'flex';
+    }
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('modal').style.display = 'none';
+    };
+    window.onclick = (e) => {
+      if (e.target === document.getElementById('modal')) {
+        document.getElementById('modal').style.display = 'none';
+      }
+    };
+
+    // 5. Update handleSearch to use companies array
+    function handleSearch() {
+      const query = searchInput.value.toLowerCase();
+      const sortOrder = document.getElementById('sortOrder').value;
+      let filtered = companies.filter(c => c.name.toLowerCase().includes(query));
+      if (sortOrder === 'az') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortOrder === 'za') {
+        filtered.sort((a, b) => b.name.localeCompare(a.name));
+      } else if (sortOrder === 'popularity') {
+        filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+      } else if (sortOrder === 'reversepop') {
+        filtered.sort((a, b) => (a.popularity || 0) - (b.popularity || 0));
+      } else if (sortOrder === 'shortest') {
+        filtered.sort((a, b) => a.name.length - b.name.length);
+      } else if (sortOrder === 'longest') {
+        filtered.sort((a, b) => b.name.length - a.name.length);
+      } else if (sortOrder === 'random') {
+        filtered = filtered.sort(() => Math.random() - 0.5);
+      }
+      renderList(filtered.map(c => c.name));
+    }
+
+    searchInput.addEventListener('input', () => { if (companies.length) handleSearch(); });
+    document.getElementById('sortOrder').addEventListener('change', () => { if (companies.length) handleSearch(); });
+    // Button event handlers
+    document.getElementById('filterBtn').addEventListener('click', () => {
+      searchInput.focus();
+    });
+    // Update sortBtn cycling to include new options
+    const sortOptions = ['unsorted', 'az', 'za', 'popularity', 'reversepop', 'shortest', 'longest', 'random'];
+    document.getElementById('sortBtn').addEventListener('click', () => {
+      const sortOrder = document.getElementById('sortOrder');
+      const currentIdx = sortOptions.indexOf(sortOrder.value);
+      sortOrder.value = sortOptions[(currentIdx + 1) % sortOptions.length];
+      if (companies.length) handleSearch();
+    });
+  </script>
+</body>
+</html>

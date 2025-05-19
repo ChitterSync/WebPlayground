@@ -1,0 +1,75 @@
+[
+  {
+    "user": "@gia",
+    "content": "Welcome to Gia Quicks! 🚀\nShare your thoughts, moments, or quick tips with the world.",
+    "likes": 12,
+    "comments": 3,
+    "shares": 1,
+    "commentsList": [
+      {
+        "user": "@alex",
+        "text": "Love this new feature! 🚀",
+        "replies": [
+          { "user": "@gia", "text": "Thank you Alex!" },
+          { "user": "@whynottry", "text": "Agreed, it's awesome!" }
+        ]
+      },
+      {
+        "user": "@jade",
+        "text": "Excited to see what people post!",
+        "replies": [
+          { "user": "@alex", "text": "Me too!" }
+        ]
+      },
+      {
+        "user": "@whynottry",
+        "text": "Looks awesome, Gia!"
+      }
+    ]
+  },
+  {
+    "user": "@alex",
+    "content": "Just finished a 5k run! 🏃‍♂️ #fitness",
+    "likes": 8,
+    "comments": 2,
+    "shares": 0,
+    "commentsList": [
+      {
+        "user": "@gia",
+        "text": "Congrats! How long did it take?",
+        "replies": [
+          { "user": "@alex", "text": "Thanks Gia! About 28 minutes." },
+          { "user": "@jade", "text": "Great job!" }
+        ]
+      },
+      {
+        "user": "@whynottry",
+        "text": "Keep it up, Alex!"
+      }
+    ]
+  },
+  {
+    "user": "@jade",
+    "content": "Check out this cool JavaScript trick!\nconsole.log([1,2,3].reverse());",
+    "likes": 15,
+    "comments": 3,
+    "shares": 2,
+    "commentsList": [
+      {
+        "user": "@alex",
+        "text": "Nice! JS always surprises me.",
+        "replies": [
+          { "user": "@jade", "text": "Right? It's so handy!" }
+        ]
+      },
+      {
+        "user": "@gia",
+        "text": "I use this all the time!"
+      },
+      {
+        "user": "@jade",
+        "text": "Glad you like it!"
+      }
+    ]
+  }
+]

@@ -1,0 +1,232 @@
+[
+  {
+    "name": "Google",
+    "popularity": 4800000000,
+    "about": "Google is a global leader in search, advertising, cloud computing, and more."
+  },
+  {
+    "name": "Microsoft",
+    "popularity": 375000000,
+    "about": "Microsoft develops software, hardware, and cloud services, best known for Windows and Office."
+  },
+  {
+    "name": "Apple",
+    "popularity": 2200000000,
+    "about": "Apple designs and sells consumer electronics, software, and online services, including the iPhone and Mac."
+  },
+  {
+    "name": "Amazon",
+    "popularity": 310000000,
+    "about": "Amazon is the world's largest online retailer and a major provider of cloud services."
+  },
+  {
+    "name": "Meta",
+    "popularity": 3300000000,
+    "about": "Meta (formerly Facebook) connects people through social media and develops virtual reality technologies."
+  },
+  {
+    "name": "Netflix",
+    "popularity": 300000000,
+    "about": "Netflix is a leading streaming service for movies and TV shows worldwide."
+  },
+  {
+    "name": "Tesla",
+    "popularity": 5000000,
+    "about": "Tesla designs and manufactures electric vehicles, batteries, and clean energy products."
+  },
+  {
+    "name": "Nvidia",
+    "popularity": 20000000,
+    "about": "Nvidia is a leader in graphics processing units (GPUs) and AI computing."
+  },
+  {
+    "name": "Adobe",
+    "popularity": 32000000,
+    "about": "Adobe creates software for creatives, including Photoshop, Illustrator, and Acrobat."
+  },
+  {
+    "name": "Salesforce",
+    "popularity": 150000,
+    "about": "Salesforce is a global leader in customer relationship management (CRM) software."
+  },
+  {
+    "name": "Intel",
+    "popularity": "63.7% of computers",
+    "about": "Intel is a major manufacturer of semiconductor chips and processors."
+  },
+  {
+    "name": "IBM",
+    "popularity": 600,
+    "about": "IBM provides hardware, software, and consulting services, with a focus on AI and cloud."
+  },
+  {
+    "name": "Oracle",
+    "popularity": 650,
+    "about": "Oracle is a leader in database software, cloud solutions, and enterprise software."
+  },
+  {
+    "name": "Cisco",
+    "popularity": 680,
+    "about": "Cisco designs and sells networking hardware, software, and telecommunications equipment."
+  },
+  {
+    "name": "Spotify",
+    "popularity": 830,
+    "about": "Spotify is a popular music streaming service with millions of tracks and podcasts."
+  },
+  {
+    "name": "Snap",
+    "popularity": 600,
+    "about": "Snap Inc. is the parent company of Snapchat, a multimedia messaging app."
+  },
+  {
+    "name": "Twitter",
+    "popularity": 890,
+    "about": "Twitter is a social media platform for real-time news and conversations."
+  },
+  {
+    "name": "Uber",
+    "popularity": 870,
+    "about": "Uber provides ride-hailing, food delivery, and freight services worldwide."
+  },
+  {
+    "name": "Airbnb",
+    "popularity": 860,
+    "about": "Airbnb is an online marketplace for lodging, primarily homestays for vacation rentals."
+  },
+  {
+    "name": "Shopify",
+    "popularity": 780,
+    "about": "Shopify offers e-commerce solutions for online stores and retail point-of-sale systems."
+  },
+  {
+    "name": "Zoom",
+    "popularity": 840,
+    "about": "Zoom is a leading video conferencing and online meeting platform."
+  },
+  {
+    "name": "Slack",
+    "popularity": 770,
+    "about": "Slack is a messaging app for teams, enabling collaboration and communication."
+  },
+  {
+    "name": "Dropbox",
+    "popularity": 720,
+    "about": "Dropbox provides cloud storage, file synchronization, and personal cloud services."
+  },
+  {
+    "name": "Atlassian",
+    "popularity": 730,
+    "about": "Atlassian develops products for software development, project management, and team collaboration."
+  },
+  {
+    "name": "Pinterest",
+    "popularity": 760,
+    "about": "Pinterest is a visual discovery engine for finding ideas like recipes, home decor, and more."
+  },
+  {
+    "name": "LinkedIn",
+    "popularity": 910,
+    "about": "LinkedIn is a professional networking platform for career development and job searching."
+  },
+  {
+    "name": "Reddit",
+    "popularity": 820,
+    "about": "Reddit is a network of communities based on people's interests."
+  },
+  {
+    "name": "Quora",
+    "popularity": 550,
+    "about": "Quora is a question-and-answer website where questions are asked, answered, and edited by users."
+  },
+  {
+    "name": "Yelp",
+    "popularity": 580,
+    "about": "Yelp publishes crowd-sourced reviews about businesses, especially restaurants and services."
+  },
+  {
+    "name": "Twitch",
+    "popularity": 810,
+    "about": "Twitch is a live streaming platform for gamers and creators."
+  },
+  {
+    "name": "Discord",
+    "popularity": 930,
+    "about": "Discord is a voice, video, and text communication platform for communities."
+  },
+  {
+    "name": "TikTok",
+    "popularity": 990,
+    "about": "TikTok is a short-form video hosting service for creating and sharing videos."
+  },
+  {
+    "name": "Snapchat",
+    "popularity": 790,
+    "about": "Snapchat is a multimedia messaging app popular for its disappearing messages and filters."
+  },
+  {
+    "name": "WhatsApp",
+    "popularity": 960,
+    "about": "WhatsApp is a cross-platform messaging and Voice over IP service."
+  },
+  {
+    "name": "Telegram",
+    "popularity": 740,
+    "about": "Telegram is a cloud-based instant messaging, video telephony, and VoIP service."
+  },
+  {
+    "name": "Signal",
+    "popularity": 620,
+    "about": "Signal is a secure messaging app with end-to-end encryption."
+  },
+  {
+    "name": "WeChat",
+    "popularity": 940,
+    "about": "WeChat is a Chinese multi-purpose messaging, social media, and mobile payment app."
+  },
+  {
+    "name": "Line",
+    "popularity": 500,
+    "about": "Line is a communication app for instant messaging on smartphones and computers."
+  },
+  {
+    "name": "Viber",
+    "popularity": 450,
+    "about": "Viber is a cross-platform voice over IP and instant messaging software."
+  },
+  {
+    "name": "KakaoTalk",
+    "popularity": 400,
+    "about": "KakaoTalk is a South Korean mobile messaging app."
+  },
+  {
+    "name": "Reach Studios",
+    "popularity": 150,
+    "about": "Reach Studios is your creative digital studio for innovative projects."
+  },
+  {
+    "name": "ChitterSync",
+    "popularity": 150,
+    "about": "ChitterSync connects people and resources for seamless online experiences."
+  },
+  {
+    "name": "Gia",
+    "popularity": 150,
+    "about": "Gia is a project by Reach Studios for the best solution for a streaming service providing music, video series, comics, and more all in one place. made to empower creators who want to grow a genuine connection with their audience, created by the team behind ChitterSync."
+  },
+  {
+    "name": "ChitterHaven",
+    "popularity": 150,
+    "about": "ChitterHaven is a community-driven platform for sharing and collaboration."
+  },
+  {
+    "name": "JadeConnect",
+    "popularity": 150,
+    "about": "JadeConnect is an all-in-one Discord bot for server management."
+  },
+  {
+    "name": "NovanceModding",
+    "popularity": 150,
+    "about": "NovanceModding is a modding community and resource hub. made and maintained by the team behind ChitterSync. made to make gaming more fun and enjoyable."
+  }
+]
